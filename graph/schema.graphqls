@@ -1,0 +1,83 @@
+# GraphQL schema example
+#
+# https://gqlgen.com/getting-started/
+directive @requireLogin(hasToken: Boolean!) on FIELD_DEFINITION
+
+type RFQ {
+  id: ID!
+  CompanyName: String!
+  CompanyAddress: String!
+  CompanyWebsite: String!
+  QuotationDate: String!
+  QuotationNo: String!
+  QuotationExpires: String!
+  MadeForName: String!
+  MadeForAddress: String!
+  MadeForPhone: String!
+  SentToName: String!
+  SentToAddress: String!
+  SentToPhone: String!
+  Items: [Item!]!
+  SNK: [String!]!
+  Disc: Int!
+  Tax: Int!
+  Interest: Int!
+}
+
+type Item {
+  HeaderID: ID!
+  Nama: String!
+  Harga: Int!
+  Qty: Int!
+}
+
+type RFQList {
+  id: ID!
+  CompanyName: String!
+  QuotationNo: String!
+}
+input ItemInput {
+  Nama: String!
+  Harga: Int!
+  Qty: Int!
+}
+
+input NewRFQ {
+  CompanyName: String!
+  CompanyAddress: String!
+  CompanyWebsite: String!
+  QuotationDate: String!
+  QuotationNo: String!
+  QuotationExpires: String!
+  MadeForName: String!
+  MadeForAddress: String!
+  MadeForPhone: String!
+  SentToName: String!
+  SentToAddress: String!
+  SentToPhone: String!
+  Items: [ItemInput]!
+  SNK: [String!]!
+  Disc: Int!
+  Tax: Int!
+  Interest: Int!
+}
+
+input Login {
+  email: String!
+  password: String!
+}
+type LoginResponse {
+  token: String!
+}
+input RFQInput {
+  id: String!
+}
+type Mutation {
+  createRFQ(input: NewRFQ!): RFQ!
+  login(input: Login!): LoginResponse!
+  RFQ(input: RFQInput!): RFQ! @requireLogin(hasToken: true)
+}
+
+type Query {
+  RFQList: [RFQList!]! @requireLogin(hasToken: true)
+}
